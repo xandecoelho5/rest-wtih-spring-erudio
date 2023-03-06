@@ -8,8 +8,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static com.xandecoelho5.restwithspringerudio.mapper.DozerMapper.parseListObjects;
-import static com.xandecoelho5.restwithspringerudio.mapper.DozerMapper.parseObject;
+import static com.xandecoelho5.restwithspringerudio.mapper.CustomModelMapper.parseListObjects;
+import static com.xandecoelho5.restwithspringerudio.mapper.CustomModelMapper.parseObject;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class DozerMapperTest {

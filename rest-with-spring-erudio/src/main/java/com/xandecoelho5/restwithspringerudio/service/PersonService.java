@@ -8,13 +8,15 @@ import com.xandecoelho5.restwithspringerudio.exception.ResourceNotFoundException
 import com.xandecoelho5.restwithspringerudio.mapper.custom.PersonMapper;
 import com.xandecoelho5.restwithspringerudio.model.Person;
 import com.xandecoelho5.restwithspringerudio.repository.PersonRepository;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static com.xandecoelho5.restwithspringerudio.mapper.DozerMapper.parseListObjects;
-import static com.xandecoelho5.restwithspringerudio.mapper.DozerMapper.parseObject;
+import static com.xandecoelho5.restwithspringerudio.mapper.CustomModelMapper.parseListObjects;
+import static com.xandecoelho5.restwithspringerudio.mapper.CustomModelMapper.parseObject;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
@@ -25,6 +27,13 @@ public class PersonService {
     private PersonRepository repository;
     @Autowired
     private PersonMapper mapper;
+
+//    private ModelMapper modelMapper;
+
+//    public PersonService() {
+//        TypeMap<Person, PersonVO> propertyMapper = modelMapper.createTypeMap(Person.class, PersonVO.class);
+//        propertyMapper.addMapping(Person::getId, PersonVO::setKey);
+//    }
 
     public PersonVO create(PersonVO person) {
         if (person == null) throw new RequiredObjectIsNullException();

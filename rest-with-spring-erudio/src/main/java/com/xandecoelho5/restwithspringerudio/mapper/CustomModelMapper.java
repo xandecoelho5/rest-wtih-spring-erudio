@@ -1,16 +1,15 @@
 package com.xandecoelho5.restwithspringerudio.mapper;
 
-import com.github.dozermapper.core.DozerBeanMapperBuilder;
-import com.github.dozermapper.core.Mapper;
+import org.modelmapper.ModelMapper;
 
 import java.util.List;
 
-public class DozerMapper {
+public class CustomModelMapper {
 
-    private DozerMapper() {
+    private CustomModelMapper() {
     }
 
-    private static Mapper mapper = DozerBeanMapperBuilder.buildDefault();
+    private static final ModelMapper mapper = new ModelMapper();
 
     public static <O, D> D parseObject(O origin, Class<D> destination) {
         return mapper.map(origin, destination);

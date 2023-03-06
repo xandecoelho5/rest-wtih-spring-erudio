@@ -11,7 +11,7 @@ import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-public class SwaggerIntegrationTest extends AbstractIntegrationTest {
+class SwaggerIntegrationTest extends AbstractIntegrationTest {
 
     @Test
     void shouldDsiplaySwaggerUiPage() {

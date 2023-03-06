@@ -11,8 +11,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static com.xandecoelho5.restwithspringerudio.mapper.DozerMapper.parseListObjects;
-import static com.xandecoelho5.restwithspringerudio.mapper.DozerMapper.parseObject;
+import static com.xandecoelho5.restwithspringerudio.mapper.CustomModelMapper.parseListObjects;
+import static com.xandecoelho5.restwithspringerudio.mapper.CustomModelMapper.parseObject;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 

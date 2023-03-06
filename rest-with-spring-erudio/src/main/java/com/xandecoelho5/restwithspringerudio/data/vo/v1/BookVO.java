@@ -2,8 +2,6 @@ package com.xandecoelho5.restwithspringerudio.data.vo.v1;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.github.dozermapper.core.Mapping;
-import jakarta.persistence.*;
 import org.springframework.hateoas.RepresentationModel;
 
 import java.util.Date;
@@ -13,7 +11,7 @@ import java.util.Objects;
 public class BookVO extends RepresentationModel<BookVO> {
 
     @JsonProperty("id")
-    @Mapping("id")
+//    @Mapping("id")
     private Long key;
     private String author;
     private Date launchDate;

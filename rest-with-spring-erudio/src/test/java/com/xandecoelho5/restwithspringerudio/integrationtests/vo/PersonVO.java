@@ -1,28 +1,21 @@
-package com.xandecoelho5.restwithspringerudio.data.vo.v1;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import org.springframework.hateoas.RepresentationModel;
+package com.xandecoelho5.restwithspringerudio.integrationtests.vo;
 
 import java.util.Objects;
 
-@JsonPropertyOrder({"id", "firstName", "lastName", "address", "gender"})
-public class PersonVO extends RepresentationModel<PersonVO> {
+public class PersonVO {
 
-    @JsonProperty("id")
-//    @Mapping("id")
-    private Long key;
+    private Long id;
     private String firstName;
     private String lastName;
     private String address;
     private String gender;
 
-    public Long getKey() {
-        return key;
+    public Long getId() {
+        return id;
     }
 
-    public void setKey(Long key) {
-        this.key = key;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getFirstName() {
@@ -61,11 +54,10 @@ public class PersonVO extends RepresentationModel<PersonVO> {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
 
         PersonVO personVO = (PersonVO) o;
 
-        if (!Objects.equals(key, personVO.key)) return false;
+        if (!Objects.equals(id, personVO.id)) return false;
         if (!Objects.equals(firstName, personVO.firstName)) return false;
         if (!Objects.equals(lastName, personVO.lastName)) return false;
         if (!Objects.equals(address, personVO.address)) return false;
@@ -74,8 +66,7 @@ public class PersonVO extends RepresentationModel<PersonVO> {
 
     @Override
     public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + (key != null ? key.hashCode() : 0);
+        int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
         result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
         result = 31 * result + (address != null ? address.hashCode() : 0);
