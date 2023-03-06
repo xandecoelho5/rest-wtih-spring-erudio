@@ -3,14 +3,14 @@ package com.xandecoelho5.restwithspringerudio.mapper;
 import com.xandecoelho5.restwithspringerudio.data.vo.v1.PersonVO;
 import com.xandecoelho5.restwithspringerudio.mapper.mocks.MockPerson;
 import com.xandecoelho5.restwithspringerudio.model.Person;
-import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static com.xandecoelho5.restwithspringerudio.mapper.DozerMapper.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static com.xandecoelho5.restwithspringerudio.mapper.DozerMapper.parseListObjects;
+import static com.xandecoelho5.restwithspringerudio.mapper.DozerMapper.parseObject;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class DozerMapperTest {
 

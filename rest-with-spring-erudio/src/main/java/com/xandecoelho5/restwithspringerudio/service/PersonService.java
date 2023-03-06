@@ -1,8 +1,10 @@
 package com.xandecoelho5.restwithspringerudio.service;
 
 import com.xandecoelho5.restwithspringerudio.data.vo.v1.PersonVO;
+import com.xandecoelho5.restwithspringerudio.data.vo.v2.PersonVOV2;
 import com.xandecoelho5.restwithspringerudio.exception.ResourceNotFoundException;
 import com.xandecoelho5.restwithspringerudio.mapper.DozerMapper;
+import com.xandecoelho5.restwithspringerudio.mapper.custom.PersonMapper;
 import com.xandecoelho5.restwithspringerudio.model.Person;
 import com.xandecoelho5.restwithspringerudio.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +20,17 @@ public class PersonService {
 
     @Autowired
     private PersonRepository repository;
+    @Autowired
+    private PersonMapper mapper;
 
     public PersonVO create(PersonVO person) {
         var entity = parseObject(person, Person.class);
         return parseObject(repository.save(entity), PersonVO.class);
+    }
+
+    public PersonVOV2 createV2(PersonVOV2 person) {
+        var entity = mapper.convertVoToEntity(person);
+        return mapper.convertEntityToVo(repository.save(entity));
     }
 
     public List<PersonVO> findAll() {
