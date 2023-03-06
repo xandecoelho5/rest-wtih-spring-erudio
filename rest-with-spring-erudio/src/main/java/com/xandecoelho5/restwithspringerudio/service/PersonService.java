@@ -1,6 +1,8 @@
 package com.xandecoelho5.restwithspringerudio.service;
 
+import com.xandecoelho5.restwithspringerudio.data.vo.v1.PersonVO;
 import com.xandecoelho5.restwithspringerudio.exception.ResourceNotFoundException;
+import com.xandecoelho5.restwithspringerudio.mapper.DozerMapper;
 import com.xandecoelho5.restwithspringerudio.model.Person;
 import com.xandecoelho5.restwithspringerudio.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,25 +10,29 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static com.xandecoelho5.restwithspringerudio.mapper.DozerMapper.parseListObjects;
+import static com.xandecoelho5.restwithspringerudio.mapper.DozerMapper.parseObject;
+
 @Service
 public class PersonService {
 
     @Autowired
     private PersonRepository repository;
 
-    public Person create(Person person) {
-        return repository.save(person);
+    public PersonVO create(PersonVO person) {
+        var entity = parseObject(person, Person.class);
+        return parseObject(repository.save(entity), PersonVO.class);
     }
 
-    public List<Person> findAll() {
-        return repository.findAll();
+    public List<PersonVO> findAll() {
+        return parseListObjects(repository.findAll(), PersonVO.class);
     }
 
-    public Person findById(Long id) {
-        return getById(id);
+    public PersonVO findById(Long id) {
+        return parseObject(getById(id), PersonVO.class);
     }
 
-    public Person update(Person person) {
+    public PersonVO update(PersonVO person) {
         Person entity = getById(person.getId());
 
         entity.setFirstName(person.getFirstName());
@@ -34,7 +40,7 @@ public class PersonService {
         entity.setAddress(person.getAddress());
         entity.setGender(person.getGender());
 
-        return repository.save(entity);
+        return parseObject(repository.save(entity), PersonVO.class);
     }
 
     public void delete(Long id) {
