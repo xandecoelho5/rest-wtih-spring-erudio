@@ -1,11 +1,25 @@
 package com.xandecoelho5.restwithspringerudio.model;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "person")
 public class Person {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false, length = 80)
     private String firstName;
+
+    @Column(nullable = false, length = 80)
     private String lastName;
+
+    @Column(nullable = false, length = 80)
     private String address;
+
+    @Column(nullable = false, length = 6)
     private String gender;
 
     public Long getId() {
