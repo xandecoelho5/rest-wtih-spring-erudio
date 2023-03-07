@@ -43,12 +43,12 @@ class PersonServiceTest {
         entity.setId(1L);
 
         PersonVO vo = input.mockVO(1);
-        vo.setKey(1L);
+        vo.setId(1L);
 
         when(repository.save(entity)).thenReturn(entity);
         var result = service.create(vo);
         assertNotNull(result);
-        assertNotNull(result.getKey());
+        assertNotNull(result.getId());
         assertNotNull(result.getLinks());
         assertTrue(result.toString().contains("links: [</api/person/v1/1>;rel=\"self\"]"));
         assertEquals("Addres Test1", result.getAddress());
@@ -60,7 +60,7 @@ class PersonServiceTest {
     @Test
     void createWithNullPerson() {
         var exception = assertThrows(RequiredObjectIsNullException.class, () -> service.create(null));
-        assertEquals("It's not allowed to persist a null object.", exception.getMessage());
+        assertEquals("It is not allowed to persist a null object!", exception.getMessage());
     }
 
     @Test
@@ -71,7 +71,7 @@ class PersonServiceTest {
 
         var result = service.findById(1L);
         assertNotNull(result);
-        assertNotNull(result.getKey());
+        assertNotNull(result.getId());
         assertNotNull(result.getLinks());
         assertTrue(result.toString().contains("links: [</api/person/v1/1>;rel=\"self\"]"));
         assertEquals("Addres Test1", result.getAddress());
@@ -86,14 +86,14 @@ class PersonServiceTest {
         entity.setId(1L);
 
         PersonVO vo = input.mockVO(1);
-        vo.setKey(1L);
+        vo.setId(1L);
 
         when(repository.findById(1L)).thenReturn(Optional.of(entity));
         when(repository.save(entity)).thenReturn(entity);
 
         var result = service.update(vo);
         assertNotNull(result);
-        assertNotNull(result.getKey());
+        assertNotNull(result.getId());
         assertNotNull(result.getLinks());
         assertTrue(result.toString().contains("links: [</api/person/v1/1>;rel=\"self\"]"));
         assertEquals("Addres Test1", result.getAddress());
@@ -105,7 +105,7 @@ class PersonServiceTest {
     @Test
     void updateWithNullPerson() {
         var exception = assertThrows(RequiredObjectIsNullException.class, () -> service.update(null));
-        assertEquals("It's not allowed to persist a null object.", exception.getMessage());
+        assertEquals("It is not allowed to persist a null object!", exception.getMessage());
     }
 
     @Test

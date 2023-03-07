@@ -5,7 +5,7 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 import java.util.Date;
 import java.util.Objects;
 
-@XmlRootElement
+@XmlRootElement(name = "TokenVO")
 public class TokenVO {
 
     private String username;

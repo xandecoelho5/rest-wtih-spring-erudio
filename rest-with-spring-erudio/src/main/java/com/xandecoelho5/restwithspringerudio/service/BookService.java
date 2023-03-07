@@ -27,13 +27,13 @@ public class BookService {
 
         var entity = parseObject(book, Book.class);
         var vo = parseObject(repository.save(entity), BookVO.class);
-        vo.add(linkTo(methodOn(BookController.class).findById(vo.getKey())).withSelfRel());
+        vo.add(linkTo(methodOn(BookController.class).findById(vo.getId())).withSelfRel());
         return vo;
     }
 
     public List<BookVO> findAll() {
         var books = parseListObjects(repository.findAll(), BookVO.class);
-        books.forEach(p -> p.add(linkTo(methodOn(BookController.class).findById(p.getKey())).withSelfRel()));
+        books.forEach(p -> p.add(linkTo(methodOn(BookController.class).findById(p.getId())).withSelfRel()));
         return books;
     }
 
@@ -46,15 +46,15 @@ public class BookService {
     public BookVO update(BookVO book) {
         if (book == null) throw new RequiredObjectIsNullException();
 
-        Book entity = getById(book.getKey());
+        Book entity = getById(book.getId());
 
         entity.setAuthor(book.getAuthor());
         entity.setLaunchDate(book.getLaunchDate());
         entity.setPrice(book.getPrice());
         entity.setTitle(book.getTitle());
 
-        var vo = parseObject(getById(book.getKey()), BookVO.class);
-        vo.add(linkTo(methodOn(BookController.class).findById(vo.getKey())).withSelfRel());
+        var vo = parseObject(repository.save(entity), BookVO.class);
+        vo.add(linkTo(methodOn(BookController.class).findById(vo.getId())).withSelfRel());
         return vo;
     }
 

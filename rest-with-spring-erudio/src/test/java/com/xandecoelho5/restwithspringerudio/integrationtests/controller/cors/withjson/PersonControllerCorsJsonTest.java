@@ -61,7 +61,7 @@ class PersonControllerCorsJsonTest extends AbstractIntegrationTest {
 
     @Test
     @Order(1)
-    void testCreateWithRightOrigin() throws JsonProcessingException {
+    void testCreate() throws JsonProcessingException {
         mockPerson();
 
         var content = given().spec(specification)
@@ -74,12 +74,6 @@ class PersonControllerCorsJsonTest extends AbstractIntegrationTest {
         var persistedPerson = objectMapper.readValue(content, PersonVO.class);
         person = persistedPerson;
 
-        assertNotNull(persistedPerson);
-        assertNotNull(persistedPerson.getId());
-        assertNotNull(persistedPerson.getFirstName());
-        assertNotNull(persistedPerson.getLastName());
-        assertNotNull(persistedPerson.getAddress());
-        assertNotNull(persistedPerson.getGender());
         assertTrue(persistedPerson.getId() > 0);
         assertEquals("Xande", persistedPerson.getFirstName());
         assertEquals("Coelho", persistedPerson.getLastName());
@@ -153,5 +147,6 @@ class PersonControllerCorsJsonTest extends AbstractIntegrationTest {
         person.setLastName("Coelho");
         person.setAddress("Rua 1, 123");
         person.setGender("Male");
+        person.setEnabled(true);
     }
 }

@@ -1,29 +1,24 @@
 package com.xandecoelho5.restwithspringerudio.data.vo.v1;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.springframework.hateoas.RepresentationModel;
 
 import java.util.Date;
 import java.util.Objects;
 
-@JsonPropertyOrder({"id", "author", "launchDate", "price", "title"})
 public class BookVO extends RepresentationModel<BookVO> {
 
-    @JsonProperty("id")
-//    @Mapping("id")
-    private Long key;
+    private Long id;
     private String author;
     private Date launchDate;
     private Double price;
     private String title;
 
-    public Long getKey() {
-        return key;
+    public Long getId() {
+        return id;
     }
 
-    public void setKey(Long key) {
-        this.key = key;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getAuthor() {
@@ -65,7 +60,7 @@ public class BookVO extends RepresentationModel<BookVO> {
 
         BookVO bookVO = (BookVO) o;
 
-        if (!Objects.equals(key, bookVO.key)) return false;
+        if (!Objects.equals(id, bookVO.id)) return false;
         if (!Objects.equals(author, bookVO.author)) return false;
         if (!Objects.equals(launchDate, bookVO.launchDate)) return false;
         if (!Objects.equals(price, bookVO.price)) return false;
@@ -74,7 +69,7 @@ public class BookVO extends RepresentationModel<BookVO> {
 
     @Override
     public int hashCode() {
-        int result = key != null ? key.hashCode() : 0;
+        int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (author != null ? author.hashCode() : 0);
         result = 31 * result + (launchDate != null ? launchDate.hashCode() : 0);
         result = 31 * result + (price != null ? price.hashCode() : 0);

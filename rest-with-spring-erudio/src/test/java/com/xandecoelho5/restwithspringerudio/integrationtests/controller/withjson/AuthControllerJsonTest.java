@@ -4,10 +4,6 @@ import com.xandecoelho5.restwithspringerudio.config.TestConfig;
 import com.xandecoelho5.restwithspringerudio.integrationtests.testcontainer.AbstractIntegrationTest;
 import com.xandecoelho5.restwithspringerudio.integrationtests.vo.AccountCredentialsVO;
 import com.xandecoelho5.restwithspringerudio.integrationtests.vo.TokenVO;
-import io.restassured.builder.RequestSpecBuilder;
-import io.restassured.filter.log.LogDetail;
-import io.restassured.filter.log.RequestLoggingFilter;
-import io.restassured.filter.log.ResponseLoggingFilter;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -49,9 +45,9 @@ class AuthControllerJsonTest extends AbstractIntegrationTest {
                 .basePath("/auth/refresh")
                 .port(TestConfig.SERVER_PORT)
                 .contentType(TestConfig.CONTENT_TYPE_JSON)
-                .pathParam("username", tokenVO.getAccessToken())
+                .pathParam("username", tokenVO.getUsername())
                 .header(TestConfig.HEADER_AUTHORIZATION, "Bearer " + tokenVO.getRefreshToken())
-                .when().put("{username}")
+                .when().put("/{username}")
                 .then().statusCode(200)
                 .extract()
                 .body().as(TokenVO.class);

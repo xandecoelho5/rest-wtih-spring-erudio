@@ -33,19 +33,12 @@ public class PersonService {
     @Autowired
     private PagedResourcesAssembler<PersonVO> assembler;
 
-//    private ModelMapper modelMapper;
-
-//    public PersonService() {
-//        TypeMap<Person, PersonVO> propertyMapper = modelMapper.createTypeMap(Person.class, PersonVO.class);
-//        propertyMapper.addMapping(Person::getId, PersonVO::setKey);
-//    }
-
     public PersonVO create(PersonVO person) {
         if (person == null) throw new RequiredObjectIsNullException();
 
         var entity = parseObject(person, Person.class);
         var vo = parseObject(repository.save(entity), PersonVO.class);
-        vo.add(linkTo(methodOn(PersonController.class).findById(vo.getKey())).withSelfRel());
+        vo.add(linkTo(methodOn(PersonController.class).findById(vo.getId())).withSelfRel());
         return vo;
     }
 
@@ -67,7 +60,7 @@ public class PersonService {
     @NotNull
     private PagedModel<EntityModel<PersonVO>> getEntitiesWithHateoasLinks(Pageable pageable, Page<Person> personPage) {
         var personsVOsPage = personPage.map(p -> parseObject(p, PersonVO.class))
-                .map(p -> p.add(linkTo(methodOn(PersonController.class).findById(p.getKey())).withSelfRel()));
+                .map(p -> p.add(linkTo(methodOn(PersonController.class).findById(p.getId())).withSelfRel()));
 
         var link = linkTo(methodOn(PersonController.class).findAll(pageable.getPageNumber(), pageable.getPageSize(), "asc")).withSelfRel();
 
@@ -84,15 +77,15 @@ public class PersonService {
     public PersonVO update(PersonVO person) {
         if (person == null) throw new RequiredObjectIsNullException();
 
-        Person entity = getById(person.getKey());
+        Person entity = getById(person.getId());
 
         entity.setFirstName(person.getFirstName());
         entity.setLastName(person.getLastName());
         entity.setAddress(person.getAddress());
         entity.setGender(person.getGender());
 
-        var vo = parseObject(getById(person.getKey()), PersonVO.class);
-        vo.add(linkTo(methodOn(PersonController.class).findById(vo.getKey())).withSelfRel());
+        var vo = parseObject(repository.save(entity), PersonVO.class);
+        vo.add(linkTo(methodOn(PersonController.class).findById(vo.getId())).withSelfRel());
         return vo;
     }
 

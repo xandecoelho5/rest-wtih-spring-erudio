@@ -1,11 +1,5 @@
 package com.xandecoelho5.restwithspringerudio.service;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
-
-import java.util.List;
-import java.util.Optional;
-
 import com.xandecoelho5.restwithspringerudio.data.vo.v1.BookVO;
 import com.xandecoelho5.restwithspringerudio.exception.RequiredObjectIsNullException;
 import com.xandecoelho5.restwithspringerudio.mapper.mocks.MockBook;
@@ -20,6 +14,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.List;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 
 @TestInstance(Lifecycle.PER_CLASS)
@@ -49,7 +50,7 @@ class BookServiceTest {
 
         var result = service.findById(1L);
         assertNotNull(result);
-        assertNotNull(result.getKey());
+        assertNotNull(result.getId());
         assertNotNull(result.getLinks());
 
         assertTrue(result.toString().contains("links: [</api/book/v1/1>;rel=\"self\"]"));
@@ -67,14 +68,13 @@ class BookServiceTest {
         entity.setId(1L);
 
         BookVO vo = input.mockVO(1);
-        vo.setKey(1L);
+        vo.setId(1L);
 
-        when(repository.save(entity)).thenReturn(entity);
+        when(repository.save(any(Book.class))).thenReturn(entity);
 
         var result = service.create(vo);
 
-        assertNotNull(result);
-        assertNotNull(result.getKey());
+        assertNotNull(result.getId());
         assertNotNull(result.getLinks());
 
         assertTrue(result.toString().contains("links: [</api/book/v1/1>;rel=\"self\"]"));
@@ -104,8 +104,7 @@ class BookServiceTest {
         entity.setId(1L);
 
         BookVO vo = input.mockVO(1);
-        vo.setKey(1L);
-
+        vo.setId(1L);
 
         when(repository.findById(1L)).thenReturn(Optional.of(entity));
         when(repository.save(entity)).thenReturn(entity);
@@ -113,7 +112,7 @@ class BookServiceTest {
         var result = service.update(vo);
 
         assertNotNull(result);
-        assertNotNull(result.getKey());
+        assertNotNull(result.getId());
         assertNotNull(result.getLinks());
 
         assertTrue(result.toString().contains("links: [</api/book/v1/1>;rel=\"self\"]"));
@@ -159,8 +158,7 @@ class BookServiceTest {
 
         var bookOne = people.get(1);
 
-        assertNotNull(bookOne);
-        assertNotNull(bookOne.getKey());
+        assertNotNull(bookOne.getId());
         assertNotNull(bookOne.getLinks());
 
         assertTrue(bookOne.toString().contains("links: [</api/book/v1/1>;rel=\"self\"]"));
@@ -171,8 +169,7 @@ class BookServiceTest {
 
         var bookFour = people.get(4);
 
-        assertNotNull(bookFour);
-        assertNotNull(bookFour.getKey());
+        assertNotNull(bookFour.getId());
         assertNotNull(bookFour.getLinks());
 
         assertTrue(bookFour.toString().contains("links: [</api/book/v1/4>;rel=\"self\"]"));
@@ -183,8 +180,7 @@ class BookServiceTest {
 
         var bookSeven = people.get(7);
 
-        assertNotNull(bookSeven);
-        assertNotNull(bookSeven.getKey());
+        assertNotNull(bookSeven.getId());
         assertNotNull(bookSeven.getLinks());
 
         assertTrue(bookSeven.toString().contains("links: [</api/book/v1/7>;rel=\"self\"]"));
