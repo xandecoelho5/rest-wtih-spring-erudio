@@ -2,7 +2,7 @@ package com.xandecoelho5.restwithspringerudio.config;
 
 public class TestConfig {
 
-    public static final int SERVER_PORT = 8888;
+    public static final int SERVER_PORT = 8888; // 80
     public static final String HEADER_AUTHORIZATION = "Authorization";
     public static final String HEADER_ORIGIN = "Origin";
 
