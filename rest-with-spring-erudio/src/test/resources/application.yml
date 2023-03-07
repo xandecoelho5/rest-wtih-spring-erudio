@@ -2,6 +2,8 @@ server:
   port: 8888
 cors:
   origin-patterns: http://localhost:3000,http://localhost:8080,https://erudio.com.br
+file:
+  upload-dir: /uploadDir
 security:
   jwt:
     token:
@@ -14,7 +16,11 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
-
+  servlet:
+    multipart:
+      file-size-threshold: 2KB
+      max-file-size: 200MB
+      max-request-size: 215MB
 springdoc:
   paths-to-match:
     - /auth/**
