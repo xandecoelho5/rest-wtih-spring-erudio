@@ -83,6 +83,7 @@ class PersonControllerYamlTest extends AbstractIntegrationTest {
         assertNotNull(persistedPerson.getLastName());
         assertNotNull(persistedPerson.getAddress());
         assertNotNull(persistedPerson.getGender());
+        assertTrue(persistedPerson.getEnabled());
         assertTrue(persistedPerson.getId() > 0);
         assertEquals("Xande", persistedPerson.getFirstName());
         assertEquals("Coelho", persistedPerson.getLastName());
@@ -111,6 +112,7 @@ class PersonControllerYamlTest extends AbstractIntegrationTest {
         assertNotNull(persistedPerson.getLastName());
         assertNotNull(persistedPerson.getAddress());
         assertNotNull(persistedPerson.getGender());
+        assertTrue(persistedPerson.getEnabled());
         assertEquals(person.getId(), persistedPerson.getId());
         assertEquals("Xande", persistedPerson.getFirstName());
         assertEquals("Coelho2", persistedPerson.getLastName());
@@ -120,6 +122,34 @@ class PersonControllerYamlTest extends AbstractIntegrationTest {
 
     @Test
     @Order(3)
+    void testDisablePerson() {
+        var persistedPerson = given().spec(specification)
+                .config(getRestAssuredConfig())
+                .contentType(TestConfig.CONTENT_TYPE_YML)
+                .accept(TestConfig.CONTENT_TYPE_YML)
+                .header(TestConfig.HEADER_ORIGIN, TestConfig.ORIGIN_ERUDIO)
+                .pathParams("id", person.getId())
+                .when().patch("{id}")
+                .then().statusCode(200)
+                .extract()
+                .body().as(PersonVO.class, objectMapper);
+
+        assertNotNull(persistedPerson);
+        assertNotNull(persistedPerson.getId());
+        assertNotNull(persistedPerson.getFirstName());
+        assertNotNull(persistedPerson.getLastName());
+        assertNotNull(persistedPerson.getAddress());
+        assertNotNull(persistedPerson.getGender());
+        assertFalse(persistedPerson.getEnabled());
+        assertEquals(person.getId(), persistedPerson.getId());
+        assertEquals("Xande", persistedPerson.getFirstName());
+        assertEquals("Coelho2", persistedPerson.getLastName());
+        assertEquals("Rua 1, 123", persistedPerson.getAddress());
+        assertEquals("Male", persistedPerson.getGender());
+    }
+
+    @Test
+    @Order(4)
     void testFindById() {
         mockPerson();
 
@@ -140,6 +170,7 @@ class PersonControllerYamlTest extends AbstractIntegrationTest {
         assertNotNull(persistedPerson.getLastName());
         assertNotNull(persistedPerson.getAddress());
         assertNotNull(persistedPerson.getGender());
+        assertFalse(persistedPerson.getEnabled());
         assertEquals(person.getId(), persistedPerson.getId());
         assertEquals("Xande", persistedPerson.getFirstName());
         assertEquals("Coelho2", persistedPerson.getLastName());
@@ -148,7 +179,7 @@ class PersonControllerYamlTest extends AbstractIntegrationTest {
     }
 
     @Test
-    @Order(4)
+    @Order(5)
     void testDelete() {
         given().spec(specification)
                 .config(getRestAssuredConfig())
@@ -158,7 +189,7 @@ class PersonControllerYamlTest extends AbstractIntegrationTest {
     }
 
     @Test
-    @Order(5)
+    @Order(6)
     void testFindAll() {
         var content = given().spec(specification)
                 .config(getRestAssuredConfig())
@@ -177,6 +208,7 @@ class PersonControllerYamlTest extends AbstractIntegrationTest {
         assertNotNull(foundPersonOne.getLastName());
         assertNotNull(foundPersonOne.getAddress());
         assertNotNull(foundPersonOne.getGender());
+        assertTrue(foundPersonOne.getEnabled());
         assertEquals(1, foundPersonOne.getId());
         assertEquals("Ayrton", foundPersonOne.getFirstName());
         assertEquals("Senna", foundPersonOne.getLastName());
@@ -189,6 +221,7 @@ class PersonControllerYamlTest extends AbstractIntegrationTest {
         assertNotNull(foundPersonSix.getLastName());
         assertNotNull(foundPersonSix.getAddress());
         assertNotNull(foundPersonSix.getGender());
+        assertTrue(foundPersonSix.getEnabled());
         assertEquals(9, foundPersonSix.getId());
         assertEquals("Nelson", foundPersonSix.getFirstName());
         assertEquals("Mvezo", foundPersonSix.getLastName());
@@ -197,7 +230,7 @@ class PersonControllerYamlTest extends AbstractIntegrationTest {
     }
 
     @Test
-    @Order(6)
+    @Order(7)
     void testFindAllWithoutToken() {
         var specificationWithoutToken = new RequestSpecBuilder()
                 .setBasePath("/api/person/v1")
@@ -219,6 +252,7 @@ class PersonControllerYamlTest extends AbstractIntegrationTest {
         person.setLastName("Coelho");
         person.setAddress("Rua 1, 123");
         person.setGender("Male");
+        person.setEnabled(true);
     }
 
     private RestAssuredConfig getRestAssuredConfig() {

@@ -72,7 +72,6 @@ public class PersonController {
         return service.create(person);
     }
 
-
     @PostMapping(value = "/v2",
             produces = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YML},
             consumes = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YML})
@@ -94,6 +93,22 @@ public class PersonController {
     )
     public PersonVO update(@RequestBody PersonVO person) {
         return service.update(person);
+    }
+
+    @PatchMapping(value = "/{id}", produces = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YML})
+    @Operation(
+            summary = "Disable a specific Person by your ID", description = "Disable a specific Person by your ID", tags = {"People"},
+            responses = {
+                    @ApiResponse(description = "Success", responseCode = "200", content = {@Content(schema = @Schema(implementation = PersonVO.class))}),
+                    @ApiResponse(description = "No Content", responseCode = "204"),
+                    @ApiResponse(description = "Bad Request", responseCode = "400"),
+                    @ApiResponse(description = "Unauthorized", responseCode = "401"),
+                    @ApiResponse(description = "Not Found", responseCode = "404"),
+                    @ApiResponse(description = "Internal Server Error", responseCode = "500")
+            }
+    )
+    public PersonVO disablePerson(@PathVariable("id") Long id) {
+        return service.disablePerson(id);
     }
 
     @DeleteMapping("/{id}")

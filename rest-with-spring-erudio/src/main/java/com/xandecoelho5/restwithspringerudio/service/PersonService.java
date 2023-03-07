@@ -12,6 +12,7 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -74,6 +75,12 @@ public class PersonService {
         var vo = parseObject(getById(person.getKey()), PersonVO.class);
         vo.add(linkTo(methodOn(PersonController.class).findById(vo.getKey())).withSelfRel());
         return vo;
+    }
+
+    @Transactional
+    public PersonVO disablePerson(Long id) {
+        repository.disablePerson(id);
+        return findById(id);
     }
 
     public void delete(Long id) {
