@@ -1,7 +1,10 @@
 package com.xandecoelho5.restwithspringerudio.integrationtests.vo;
 
+import jakarta.xml.bind.annotation.XmlRootElement;
+
 import java.util.Objects;
 
+@XmlRootElement
 public class PersonVO {
 
     private Long id;

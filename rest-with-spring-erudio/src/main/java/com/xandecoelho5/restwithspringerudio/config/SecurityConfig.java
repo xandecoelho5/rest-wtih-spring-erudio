@@ -26,7 +26,7 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         Map<String, PasswordEncoder> encoders = new HashMap<>();
-        var pbkdf2Encoder = new Pbkdf2PasswordEncoder("secret", 1, 1, PBKDF2WithHmacSHA256);
+        var pbkdf2Encoder = new Pbkdf2PasswordEncoder("", 8, 185000, PBKDF2WithHmacSHA256);
         encoders.put("pbkdf2", pbkdf2Encoder);
         DelegatingPasswordEncoder passwordEncoder = new DelegatingPasswordEncoder("pbkdf2", encoders);
         passwordEncoder.setDefaultPasswordEncoderForMatches(pbkdf2Encoder);

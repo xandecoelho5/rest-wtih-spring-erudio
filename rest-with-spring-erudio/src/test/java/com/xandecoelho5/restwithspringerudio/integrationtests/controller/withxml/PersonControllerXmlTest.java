@@ -1,16 +1,16 @@
-package com.xandecoelho5.restwithspringerudio.integrationtests.controller.withjson;
+package com.xandecoelho5.restwithspringerudio.integrationtests.controller.withxml;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.xandecoelho5.restwithspringerudio.config.TestConfig;
 import com.xandecoelho5.restwithspringerudio.integrationtests.testcontainer.AbstractIntegrationTest;
 import com.xandecoelho5.restwithspringerudio.integrationtests.vo.AccountCredentialsVO;
 import com.xandecoelho5.restwithspringerudio.integrationtests.vo.PersonVO;
 import com.xandecoelho5.restwithspringerudio.integrationtests.vo.TokenVO;
 import io.restassured.builder.RequestSpecBuilder;
-import io.restassured.common.mapper.TypeRef;
 import io.restassured.filter.log.LogDetail;
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
@@ -25,15 +25,15 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class PersonControllerJsonTest extends AbstractIntegrationTest {
+class PersonControllerXmlTest extends AbstractIntegrationTest {
 
     private static RequestSpecification specification;
-    private static ObjectMapper objectMapper;
+    private static XmlMapper objectMapper;
     private static PersonVO person;
 
     @BeforeAll
     static void setup() {
-        objectMapper = new ObjectMapper();
+        objectMapper = new XmlMapper();
         objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 
         person = new PersonVO();
@@ -47,7 +47,8 @@ class PersonControllerJsonTest extends AbstractIntegrationTest {
         var accessToken = given()
                 .basePath("/auth/signin")
                 .port(TestConfig.SERVER_PORT)
-                .contentType(TestConfig.CONTENT_TYPE_JSON)
+                .contentType(TestConfig.CONTENT_TYPE_XML)
+                .accept(TestConfig.CONTENT_TYPE_XML)
                 .body(credentials)
                 .when().post()
                 .then().statusCode(200)
@@ -69,7 +70,8 @@ class PersonControllerJsonTest extends AbstractIntegrationTest {
         mockPerson();
 
         var content = given().spec(specification)
-                .contentType(TestConfig.CONTENT_TYPE_JSON)
+                .contentType(TestConfig.CONTENT_TYPE_XML)
+                .accept(TestConfig.CONTENT_TYPE_XML)
                 .body(person)
                 .when().post()
                 .then().statusCode(200)
@@ -96,7 +98,8 @@ class PersonControllerJsonTest extends AbstractIntegrationTest {
         person.setLastName("Coelho2");
 
         var content = given().spec(specification)
-                .contentType(TestConfig.CONTENT_TYPE_JSON)
+                .contentType(TestConfig.CONTENT_TYPE_XML)
+                .accept(TestConfig.CONTENT_TYPE_XML)
                 .body(person)
                 .when().put()
                 .then().statusCode(200)
@@ -123,7 +126,8 @@ class PersonControllerJsonTest extends AbstractIntegrationTest {
         mockPerson();
 
         var content = given().spec(specification)
-                .contentType(TestConfig.CONTENT_TYPE_JSON)
+                .contentType(TestConfig.CONTENT_TYPE_XML)
+                .accept(TestConfig.CONTENT_TYPE_XML)
                 .header(TestConfig.HEADER_ORIGIN, TestConfig.ORIGIN_ERUDIO)
                 .pathParams("id", person.getId())
                 .when().get("{id}")
@@ -147,7 +151,7 @@ class PersonControllerJsonTest extends AbstractIntegrationTest {
 
     @Test
     @Order(4)
-    void testDelete() throws JsonProcessingException {
+    void testDelete() {
         given().spec(specification)
                 .pathParams("id", person.getId())
                 .when().delete("{id}")
@@ -158,7 +162,8 @@ class PersonControllerJsonTest extends AbstractIntegrationTest {
     @Order(5)
     void testFindAll() throws JsonProcessingException {
         var content = given().spec(specification)
-                .contentType(TestConfig.CONTENT_TYPE_JSON)
+                .contentType(TestConfig.CONTENT_TYPE_XML)
+                .accept(TestConfig.CONTENT_TYPE_XML)
                 .when().get()
                 .then().statusCode(200)
 //                .extract().body().as(new TypeRef<List<PersonVO>>() {});
@@ -203,7 +208,8 @@ class PersonControllerJsonTest extends AbstractIntegrationTest {
                 .build();
 
         given().spec(specificationWithoutToken)
-                .contentType(TestConfig.CONTENT_TYPE_JSON)
+                .contentType(TestConfig.CONTENT_TYPE_XML)
+                .accept(TestConfig.CONTENT_TYPE_XML)
                 .when().get()
                 .then().statusCode(403);
     }

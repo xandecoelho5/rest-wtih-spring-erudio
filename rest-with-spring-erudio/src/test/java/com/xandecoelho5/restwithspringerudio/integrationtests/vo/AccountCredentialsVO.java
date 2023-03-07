@@ -1,7 +1,10 @@
-package com.xandecoelho5.restwithspringerudio.data.vo.v1.security;
+package com.xandecoelho5.restwithspringerudio.integrationtests.vo;
+
+import jakarta.xml.bind.annotation.XmlRootElement;
 
 import java.util.Objects;
 
+@XmlRootElement
 public class AccountCredentialsVO {
 
     private String username;

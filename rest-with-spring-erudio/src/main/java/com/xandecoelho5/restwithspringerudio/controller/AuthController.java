@@ -20,7 +20,7 @@ public class AuthController {
     @Operation(summary = "Authenticates a user and returns a token")
     @PostMapping("/signin")
     public ResponseEntity<?> signIn(@RequestBody AccountCredentialsVO data) {
-        if (!paramsIsValid(data)) {
+        if (paramIsInvalid(data)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid client request");
         }
         var token = authService.signIn(data);
@@ -44,7 +44,7 @@ public class AuthController {
         return token;
     }
 
-    private boolean paramsIsValid(AccountCredentialsVO data) {
+    private boolean paramIsInvalid(AccountCredentialsVO data) {
         return data == null || data.getUsername() == null || data.getUsername().isBlank() || data.getPassword() == null || data.getPassword().isBlank();
     }
 }
