@@ -23,8 +23,8 @@ services:
   rest-spring-erudio:
     image: xandecoelho/rest-spring-erudio
     restart: always
-#    build: ./rest-with-spring-erudio
-#    working_dir: ./rest-with-spring-erudio
+    build: .
+#    working_dir: .
 #    build: C:\NewProjects\java\rest-wtih-spring-erudio
 #    working_dir: C:\NewProjects\java\rest-wtih-spring-erudio
     environment:
