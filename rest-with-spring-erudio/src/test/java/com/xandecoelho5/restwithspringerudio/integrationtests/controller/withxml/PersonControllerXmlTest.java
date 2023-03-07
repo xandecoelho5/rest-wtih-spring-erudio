@@ -10,6 +10,8 @@ import com.xandecoelho5.restwithspringerudio.integrationtests.testcontainer.Abst
 import com.xandecoelho5.restwithspringerudio.integrationtests.vo.AccountCredentialsVO;
 import com.xandecoelho5.restwithspringerudio.integrationtests.vo.PersonVO;
 import com.xandecoelho5.restwithspringerudio.integrationtests.vo.TokenVO;
+import com.xandecoelho5.restwithspringerudio.integrationtests.vo.pagedmodels.PagedModelPerson;
+import com.xandecoelho5.restwithspringerudio.integrationtests.vo.wrapper.WrapperPersonVO;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.filter.log.LogDetail;
 import io.restassured.filter.log.RequestLoggingFilter;
@@ -191,14 +193,15 @@ class PersonControllerXmlTest extends AbstractIntegrationTest {
     void testFindAll() throws JsonProcessingException {
         var content = given().spec(specification)
                 .contentType(TestConfig.CONTENT_TYPE_XML)
+                .queryParams("page", 3, "size", 10, "direction", "asc")
                 .accept(TestConfig.CONTENT_TYPE_XML)
                 .when().get()
                 .then().statusCode(200)
 //                .extract().body().as(new TypeRef<List<PersonVO>>() {});
                 .extract().body().asString();
 
-        var people = objectMapper.readValue(content, new TypeReference<List<PersonVO>>() {
-        });
+        PagedModelPerson wrapper = objectMapper.readValue(content, PagedModelPerson.class);
+        var people = wrapper.getContent();
 
         var foundPersonOne = people.get(0);
         assertNotNull(foundPersonOne.getId());
@@ -242,6 +245,58 @@ class PersonControllerXmlTest extends AbstractIntegrationTest {
                 .accept(TestConfig.CONTENT_TYPE_XML)
                 .when().get()
                 .then().statusCode(403);
+    }
+
+    @Test
+    @Order(8)
+    void testFindByName() throws JsonProcessingException {
+        var content = given().spec(specification)
+                .contentType(TestConfig.CONTENT_TYPE_XML)
+                .pathParam("firstName", "ayr")
+                .queryParams("page", 3, "size", 10, "direction", "asc")
+                .accept(TestConfig.CONTENT_TYPE_XML)
+                .when().get("/findPersonByName/{firstName}")
+                .then().statusCode(200)
+                .extract().body().asString();
+
+        PagedModelPerson wrapper = objectMapper.readValue(content, PagedModelPerson.class);
+        var people = wrapper.getContent();
+
+        var foundPersonOne = people.get(0);
+        assertNotNull(foundPersonOne.getId());
+        assertNotNull(foundPersonOne.getFirstName());
+        assertNotNull(foundPersonOne.getLastName());
+        assertNotNull(foundPersonOne.getAddress());
+        assertNotNull(foundPersonOne.getGender());
+        assertTrue(foundPersonOne.getEnabled());
+        assertEquals(1, foundPersonOne.getId());
+        assertEquals("Ayrton", foundPersonOne.getFirstName());
+        assertEquals("Senna", foundPersonOne.getLastName());
+        assertEquals("São Paulo", foundPersonOne.getAddress());
+        assertEquals("Male", foundPersonOne.getGender());
+    }
+
+    @Test
+    @Order(9)
+    void testHATEOAS() {
+        var content = given().spec(specification)
+                .contentType(TestConfig.CONTENT_TYPE_XML)
+                .accept(TestConfig.CONTENT_TYPE_XML)
+                .queryParams("page", 3, "size", 10, "direction", "asc")
+                .when().get()
+                .then().statusCode(200)
+                .extract().body().asString();
+
+        assertTrue(content.contains("<links><rel>self</rel><href>http://localhost:8888/api/person/v1/677</href></links>"));
+        assertTrue(content.contains("<links><rel>self</rel><href>http://localhost:8888/api/person/v1/846</href></links>"));
+        assertTrue(content.contains("<links><rel>self</rel><href>http://localhost:8888/api/person/v1/714</href></links>"));
+
+        assertTrue(content.contains("<links><rel>first</rel><href>http://localhost:8888/api/person/v1?direction=asc&amp;page=0&amp;size=10&amp;sort=firstName,asc</href></links>"));
+        assertTrue(content.contains("<links><rel>prev</rel><href>http://localhost:8888/api/person/v1?direction=asc&amp;page=2&amp;size=10&amp;sort=firstName,asc</href></links>"));
+        assertTrue(content.contains("<links><rel>self</rel><href>http://localhost:8888/api/person/v1?page=3&amp;size=10&amp;direction=asc</href></links>"));
+        assertTrue(content.contains("<links><rel>next</rel><href>http://localhost:8888/api/person/v1?direction=asc&amp;page=4&amp;size=10&amp;sort=firstName,asc</href></links>"));
+        assertTrue(content.contains("<links><rel>last</rel><href>http://localhost:8888/api/person/v1?direction=asc&amp;page=100&amp;size=10&amp;sort=firstName,asc</href></links>"));
+        assertTrue(content.contains("<page><size>10</size><totalElements>1007</totalElements><totalPages>101</totalPages><number>3</number></page>"));
     }
 
 

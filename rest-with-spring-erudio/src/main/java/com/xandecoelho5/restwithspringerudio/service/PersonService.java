@@ -8,15 +8,16 @@ import com.xandecoelho5.restwithspringerudio.exception.ResourceNotFoundException
 import com.xandecoelho5.restwithspringerudio.mapper.custom.PersonMapper;
 import com.xandecoelho5.restwithspringerudio.model.Person;
 import com.xandecoelho5.restwithspringerudio.repository.PersonRepository;
-import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeMap;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
-import static com.xandecoelho5.restwithspringerudio.mapper.CustomModelMapper.parseListObjects;
 import static com.xandecoelho5.restwithspringerudio.mapper.CustomModelMapper.parseObject;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -28,6 +29,9 @@ public class PersonService {
     private PersonRepository repository;
     @Autowired
     private PersonMapper mapper;
+
+    @Autowired
+    private PagedResourcesAssembler<PersonVO> assembler;
 
 //    private ModelMapper modelMapper;
 
@@ -50,11 +54,26 @@ public class PersonService {
         return mapper.convertEntityToVo(repository.save(entity));
     }
 
-    public List<PersonVO> findAll() {
-        var persons = parseListObjects(repository.findAll(), PersonVO.class);
-        persons.forEach(p -> p.add(linkTo(methodOn(PersonController.class).findById(p.getKey())).withSelfRel()));
-        return persons;
+    public PagedModel<EntityModel<PersonVO>> findAll(Pageable pageable) {
+        var personPage = repository.findAll(pageable);
+        return getEntitiesWithHateoasLinks(pageable, personPage);
     }
+
+    public PagedModel<EntityModel<PersonVO>> findPersonsByName(String firstName, Pageable pageable) {
+        var personPage = repository.findPersonsByName(firstName, pageable);
+        return getEntitiesWithHateoasLinks(pageable, personPage);
+    }
+
+    @NotNull
+    private PagedModel<EntityModel<PersonVO>> getEntitiesWithHateoasLinks(Pageable pageable, Page<Person> personPage) {
+        var personsVOsPage = personPage.map(p -> parseObject(p, PersonVO.class))
+                .map(p -> p.add(linkTo(methodOn(PersonController.class).findById(p.getKey())).withSelfRel()));
+
+        var link = linkTo(methodOn(PersonController.class).findAll(pageable.getPageNumber(), pageable.getPageSize(), "asc")).withSelfRel();
+
+        return assembler.toModel(personsVOsPage, link);
+    }
+
 
     public PersonVO findById(Long id) {
         var vo = parseObject(getById(id), PersonVO.class);
